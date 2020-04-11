@@ -1,25 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 export default function App() {
-  const [bands, setBand] = useState(['Ghost', 'Slayer', 'Kreator']);
+  const [bands, setBands] = useState([]);
 
   const [newBand, setNewBand] = useState('');
 
   function handleAdd() {
-    setBand([...bands, newBand]);
+    setBands([...bands, newBand]);
     setNewBand('');
   }
 
   useEffect(() => {
-    alert('Did mount?');
+    const storageBands = localStorage.getItem('bands');
 
-    // Equivalenet to component did unmount
-    return () => {};
+    if (storageBands) {
+      setBands(JSON.parse(storageBands));
+    }
+    // Equivalenet to component did unmount:
+    // return () => {};
   }, []);
 
   useEffect(() => {
-    alert(`New band added!, new size: ${bands.length}`);
+    localStorage.setItem('bands', JSON.stringify(bands));
   }, [bands]);
+
+  function handleClear() {
+    localStorage.setItem('bands', JSON.stringify([]));
+    setBands([]);
+  }
 
   return (
     <>
@@ -27,15 +35,20 @@ export default function App() {
         {bands.map(band => (
           <li key={band}>{band}</li>
         ))}
-        <input
-          type="text"
-          value={newBand}
-          onChange={e => setNewBand(e.target.value)}
-        />
-        <button type="button" onClick={handleAdd}>
-          Add a band
-        </button>
       </ul>
+      <strong>You have {bands.length} bands added.</strong>
+      <input
+        type="text"
+        value={newBand}
+        onChange={e => setNewBand(e.target.value)}
+      />
+      <button type="button" onClick={handleAdd}>
+        Add a band
+      </button>
+      <br />
+      <button type="button" onClick={handleClear}>
+        Claer
+      </button>
     </>
   );
 }
