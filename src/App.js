@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function App() {
   const [bands, setBand] = useState(['Ghost', 'Slayer', 'Kreator']);
@@ -9,6 +9,17 @@ export default function App() {
     setBand([...bands, newBand]);
     setNewBand('');
   }
+
+  useEffect(() => {
+    alert('Did mount?');
+
+    // Equivalenet to component did unmount
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    alert(`New band added!, new size: ${bands.length}`);
+  }, [bands]);
 
   return (
     <>
