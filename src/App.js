@@ -1,16 +1,28 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 
 export default function App() {
   const [bands, setBands] = useState([]);
 
   const [newBand, setNewBand] = useState('');
 
-  function handleAdd(e) {
-    e.preventDefault();
+  // useCallback:
+  //
+  // When react re-render the component, all functions are re-created as well,
+  // so, to stop this kind of "unnecessary" reloading job, you can use the
+  // "useCallBack". Whith it, it only will re-create the function when the
+  // states in second parameter is changed
+  //
+  // IMPORTANT: Is only used when you need to monitor some function/state. In
+  // theses cases, the usage is dispensable
+  const handleAdd = useCallback(
+    e => {
+      e.preventDefault();
 
-    setBands([...bands, newBand]);
-    setNewBand('');
-  }
+      setBands([...bands, newBand]);
+      setNewBand('');
+    },
+    [bands, newBand]
+  );
 
   function handleClear() {
     localStorage.setItem('bands', JSON.stringify([]));
