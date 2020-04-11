@@ -5,9 +5,16 @@ export default function App() {
 
   const [newBand, setNewBand] = useState('');
 
-  function handleAdd() {
+  function handleAdd(e) {
+    e.preventDefault();
+
     setBands([...bands, newBand]);
     setNewBand('');
+  }
+
+  function handleClear() {
+    localStorage.setItem('bands', JSON.stringify([]));
+    setBands([]);
   }
 
   useEffect(() => {
@@ -16,7 +23,7 @@ export default function App() {
     if (storageBands) {
       setBands(JSON.parse(storageBands));
     }
-    // Equivalenet to component did unmount:
+    // Equivalent to component did un-mount:
     // return () => {};
   }, []);
 
@@ -24,10 +31,9 @@ export default function App() {
     localStorage.setItem('bands', JSON.stringify(bands));
   }, [bands]);
 
-  function handleClear() {
-    localStorage.setItem('bands', JSON.stringify([]));
-    setBands([]);
-  }
+  // useMemo is used for re-calculating something when some dependencies change.
+  // Generally used for specific calculations based on some state changes
+  const bandsSize = useMemo(() => bands.length, [bands]);
 
   return (
     <>
@@ -36,18 +42,20 @@ export default function App() {
           <li key={band}>{band}</li>
         ))}
       </ul>
-      <strong>You have {bands.length} bands added.</strong>
-      <input
-        type="text"
-        value={newBand}
-        onChange={e => setNewBand(e.target.value)}
-      />
-      <button type="button" onClick={handleAdd}>
-        Add a band
-      </button>
+      <strong>You have {bandsSize} bands added.</strong>
+      <form>
+        <input
+          type="text"
+          value={newBand}
+          onChange={e => setNewBand(e.target.value)}
+        />
+        <button type="submit" onClick={handleAdd}>
+          Add a band
+        </button>
+      </form>
       <br />
       <button type="button" onClick={handleClear}>
-        Claer
+        Clear bands list
       </button>
     </>
   );
