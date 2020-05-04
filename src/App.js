@@ -9,7 +9,7 @@ export default function App() {
   //
   // When react re-render the component, all functions are re-created as well,
   // so, to stop this kind of "unnecessary" reloading job, you can use the
-  // "useCallBack". Whith it, it only will re-create the function when the
+  // "useCallBack". Using it, it only will re-create the function when the
   // states in second parameter is changed
   //
   // IMPORTANT: Is only used when you need to monitor some function/state. In
